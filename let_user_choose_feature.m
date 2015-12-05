@@ -1,4 +1,4 @@
-function [ bbox, videoFrameWithBox ] = let_user_choose_feature( videoFrame, bboxes )
+function [ bbox, videoFrameWithBox, feature ] = let_user_choose_feature( videoFrame, bboxes )
 % LET USER CHOOSE FACE 
 %   Allows user to click within a bounding box of a face to choose to
 %   replace it
@@ -24,6 +24,14 @@ function [ bbox, videoFrameWithBox ] = let_user_choose_feature( videoFrame, bbox
         close
         bbox = let_user_choose_face(videoFrame, bboxes);
     end
+    
+    % Extract face from image
+    x1 = bbox(1,1);
+    x2 = bbox(1,3);
+    y1 = bbox(1,2);
+    y2 = bbox(1,4);
+    feature = videoFrame(y1:(y1+y2), x1:(x1+x2),:);
+    
     close
 
 end
