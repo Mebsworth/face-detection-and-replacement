@@ -11,7 +11,7 @@ filename = 'clip1.mp4';
 image2 = imread('willferrell-2.jpg');
 [feat2, descr2, face2, x_offset2, y_offset2] = vl_feat_detection(image2);
 
-threshold = 1.8;
+threshold = 1.2;
 [matches,scores] = vl_ubcmatch(descr1, descr2, threshold);
 
 % Get coordinates of the matched points
@@ -24,7 +24,7 @@ mp1(:,2) = mp1(:,2) - y_offset1;
 mp2(:,1) = mp2(:,1) - x_offset2;
 mp2(:,2) = mp2(:,2) - y_offset2;
 
-figure('name','MATCHES AFTER RANSAC'); ax = axes;
+figure('name','MATCHES '); ax = axes;
 showMatchedFeatures(face1,face2,mp1,mp2, 'montage','PlotOptions',{'bo','bo','g-'});
 title(ax, 'Candidate point matches');
 legend(ax, 'Matched points 1','Matched points 2');
