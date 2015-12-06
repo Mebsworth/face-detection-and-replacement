@@ -1,4 +1,4 @@
-function [ bbox, videoFrameWithBox, feature ] = let_user_choose_feature( videoFrame, bboxes )
+function [ bbox, feature ] = let_user_choose_feature( videoFrame, bboxes )
 % LET USER CHOOSE FACE 
 %   Allows user to click within a bounding box of a face to choose to
 %   replace it
