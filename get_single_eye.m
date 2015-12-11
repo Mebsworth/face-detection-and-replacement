@@ -1,4 +1,4 @@
-function [featureRow, featureCol] = get_single_feature(face, featureName, bound)
+function [featureRow, featureCol] = get_single_eye(face, faceBox, featureName, bound)
 % Finds center coordinates of feature (defined by 'featureName') in a face
 
 detector = vision.CascadeObjectDetector('ClassificationModel', featureName, 'MergeThreshold', 0);
@@ -13,12 +13,12 @@ featProbs = zeros(nr,nc);
 for i = 1:numBoxes
     c1 = boxes(i,1);
     r1 = boxes(i,2);
-    c2 = c1 + boxes(i,3) - 1;
-    r2 = r1 + boxes(i,4) - 1;
+    c2 = c1 + boxes(i,3);
+    r2 = r1 + boxes(i,4);
+    
     featProbs(r1:r2, c1:c2) = featProbs(r1:r2, c1:c2) + 1;
 end
 
-% Only look at points that are in the correct relative location 
 if strcmp(featureName, 'LeftEye')
     featProbs(:,bound:nc) = 0;
 elseif strcmp(featureName, 'RightEye')
@@ -29,7 +29,6 @@ elseif strcmp(featureName, 'Nose')
     featProbs(1:bound,:) = 0;
 end
 
-% Find point with maximum number of boxes containing it
 [m, rows] = max(featProbs);
 [m, col] = max(m);
 maxPtX = col;
@@ -50,5 +49,9 @@ Y = boxes(:,2) + (boxes(:,4) / 2.0);
 [numBoxes, ~] = size(boxes);
 featureRow = sum(Y) / numBoxes;
 featureCol = sum(X) / numBoxes;
+
+% Offset coordinates by face offset
+featureRow = featureRow + faceBox(2);
+featureCol = featureCol + faceBox(1);
 
 end

@@ -1,4 +1,4 @@
-function [imgw, imgwr, map] = tps_warp(img, outDim, Zp, Zs, interp)
+function [imgw, imgwr, map] = tps_warp(img, outDim, Zsource, Ztarget, interp)
 %
 % Description: Thin-Plane spline warping of the input image (img) to
 % output image (imgw). The warping is defined by a set of reference points
@@ -8,8 +8,8 @@ function [imgw, imgwr, map] = tps_warp(img, outDim, Zp, Zs, interp)
 % Input:
 % img - input image
 % outDim - Output canvas ([W H])
-% Zp - landmark in img
-% Zs - landmark in canvas
+% Zsource - landmark in img
+% Ztarget - landmark in canvas
 % interp.method - interpolation mode('nearest', 'invdist', 'none')
 % interp.radius - Max radius for nearest neighbor interpolation or
 %                 Radius of inverse weighted interpolation
@@ -29,7 +29,7 @@ function [imgw, imgwr, map] = tps_warp(img, outDim, Zp, Zs, interp)
 % Date: 07-Apr-09
 
 %% Initialization
-NPs = size(Zp,1); % number of landmark points
+NPs = size(Zsource,1); % number of landmark points
 
 imgH = size(img,1); % height
 imgW = size(img,2); % width
@@ -38,23 +38,25 @@ outH = outDim(2);
 outW = outDim(1);
 
 % landmark in input
-Xp = Zp(:,1)';
-Yp = Zp(:,2)';
+Xsource = Zsource(:,1)';
+Ysource = Zsource(:,2)';
 
 % landmark in output (homologous)
-Xs = Zs(:,1)';
-Ys = Zs(:,2)';
+Xtarget = Ztarget(:,1)';
+Ytarget = Ztarget(:,2)';
 
 %% Algebra of Thin-plate splines
 
 % Compute thin-plate spline mapping [W|a1 ax ay] using landmarks
-[wL]=computeWl(Xp, Yp, NPs);
-wY = [Xs(:) Ys(:); zeros(3,2)]; % Y = ( V| 0 0 0)'   where V = [G] where G is landmark homologous (nx2) ; Y is col vector of length (n+3)
+[wL]=computeWl(Xsource, Ysource, NPs);
+lambda = 0.0;
+wL = wL + lambda * eye(size(wL));
+wY = [Xtarget(:) Ytarget(:); zeros(3,2)]; % Y = ( V| 0 0 0)'   where V = [G] where G is landmark homologous (nx2) ; Y is col vector of length (n+3)
 wW = inv(wL)*wY; % (W|a1 ax ay)' = inv(L)*Y
 
 % Thin-plate spline mapping (Map all points in the plane)
 % f(x,y) = a1 + ax * x + ay * y + SUM(wi * U(|Pi-(x,y)|)) for i = 1 to n
-[Xw, Yw]=tpsMap(wW, imgH, imgW, Xp, Yp, NPs);
+[Xw, Yw]=tpsMap(wW, imgH, imgW, Xsource, Ysource, NPs);
 
 %% Warping
 
@@ -107,6 +109,8 @@ wR = sqrt((rxp-rX).^2 + (ryp-rY).^2); % distance measure r(i,j)=|Pi-(x,y)|
 wK = radialBasis(wR); % compute [K] with elements U(r)=r^2 * log (r^2)
 wP = [ones(NWs,1) X(:) Y(:)]'; % [P] = [1 x' y'] where (x',y') are n landmark points (nx2)
 wL = [wK;wP]'; % [L] = [[K P];[P' 0]]
+lambda = 0;
+wL = wL + lambda * eye(size(wL));
 
 Xw  = wL*wW(:,1); % [Pw] = [L]*[W]
 Yw  = wL*wW(:,2); % [Pw] = [L]*[W]

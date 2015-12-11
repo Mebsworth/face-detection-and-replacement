@@ -1,7 +1,9 @@
-function [ bbox, feature ] = let_user_choose_feature( videoFrame, bboxes )
+function [ feature, bbox ] = let_user_choose_feature( videoFrame, bboxes )
 % LET USER CHOOSE FACE 
 %   Allows user to click within a bounding box of a face to choose to
 %   replace it
+
+% disp('beginning let_user_choose_feature');
 
     % Draw the returned bounding boxes around the detected faces.
     videoFrameWithBox = insertShape(videoFrame, 'Rectangle', bboxes);
@@ -33,6 +35,8 @@ function [ bbox, feature ] = let_user_choose_feature( videoFrame, bboxes )
     feature = videoFrame(y1:(y1+y2), x1:(x1+x2),:);
     
     close
+    
+%     disp('ending let_user_choose_feature');
 
 end
 
