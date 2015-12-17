@@ -1,10 +1,18 @@
 function [ features ] = get_facial_features(face)
 % GET FACIAL FEATURES
 
-disp('beginning get_facial_features');
+% disp('beginning get_facial_features');
+[nr, nc, ~] = size(face);
 
 %% Detect eyes
 [eyePairRow, eyePairCol] = get_single_feature(face, 'EyePairBig');
+if (int16(eyePairRow) == 0) || (int16(eyePairCol) == 0)
+    [eyePairRow, eyePairCol] = get_single_feature(face, 'EyePairSmall');
+end
+if (int16(eyePairRow) == 0)
+    eyePairRow = nc/3;
+    eyePairCol = nr/2;
+end
 [leftEyeRow, leftEyeCol] = get_single_feature(face, 'LeftEye', int16(eyePairCol));
 [rightEyeRow, rightEyeCol] = get_single_feature(face, 'RightEye', int16(eyePairCol));
 
@@ -32,7 +40,7 @@ features.nose.y = noseRow;
 features.mouth.x = mouthCol;
 features.mouth.y = mouthRow;
 
-disp('ending get_facial_features');
+% disp('ending get_facial_features');
 
 end
 

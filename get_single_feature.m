@@ -51,4 +51,15 @@ Y = boxes(:,2) + (boxes(:,4) / 2.0);
 featureRow = sum(Y) / numBoxes;
 featureCol = sum(X) / numBoxes;
 
+
+%% SHOW
+% faceWithAllBoxes = insertShape(face,'Rectangle',boxes);
+% figure; title(featureName); subplot(1,3,1); imshow(faceWithAllBoxes);
+
+% faceWithRelevantBoxes = insertShape(face,'Rectangle',boxes);
+% subplot(1,3,2); imshow(faceWithRelevantBoxes);
+% 
+% faceWithFeaturePoint = insertShape(face,'Circle',[featureCol, featureRow, 5]);
+% subplot(1,3,3); imshow(faceWithFeaturePoint);
+
 end

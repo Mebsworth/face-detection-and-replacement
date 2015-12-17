@@ -6,6 +6,7 @@ imageA = videoFrame;
 
 % Detect face
 [faceA, oldBbox] = detect_face_with_user_input(imageA);
+[faceA, oldBbox] = expand_face(imageA, oldBbox);
 width = oldBbox(3);
 height = oldBbox(4);
 
@@ -22,17 +23,17 @@ for k = 1:15
     i = i + 1;
     
     % Detect new bounding box for face within ROI REGION OF INTEREST
-    roi_x1 = oldBbox(1) - 30;
-    roi_y1 = oldBbox(2) - 30;
-    roi_x2 = oldBbox(1) + oldBbox(3) + 30;
-    roi_y2 = oldBbox(2) + oldBbox(4) + 30;
-    smaller_region = videoFrame(roi_y1:roi_y2, roi_x1:roi_x2);
-    [ newFace, newBbox ]= detect_face(smaller_region);
+    roi_x1 = oldBbox(1) - 40;
+    roi_y1 = oldBbox(2) - 40;
+    roi_x2 = oldBbox(1) + oldBbox(3) + 40;
+    roi_y2 = oldBbox(2) + oldBbox(4) + 40;
+    region = videoFrame(roi_y1:roi_y2, roi_x1:roi_x2);
+    [ newFace, newBbox ]= detect_face(region);
     % remember these are offset, let's undo the offset
     newBbox = [roi_x1 + newBbox(1), roi_y1 + newBbox(2), newBbox(3), newBbox(4)];
     % expand newFace and newBox
     [ currentFace, newBbox ] = expand_face(videoFrame, newBbox);
-    newBbox
+    
     % Detect facial features
     [features] = get_facial_features(currentFace);
     % Find convex hull of face

@@ -10,7 +10,7 @@ y2 = bbox(4);
 nx1 = x1 - 20;
 ny1 = y1 - 20;
 nx2 = x2 + 40;
-ny2 = y2 + 60;
+ny2 = y2 + 40;
 
 newFace = img(ny1:(ny1 + ny2),nx1:(nx1 + nx2), :);
 % figure('name','expanded Face');imshow(newFace);

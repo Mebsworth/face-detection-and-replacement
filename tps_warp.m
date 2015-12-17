@@ -1,4 +1,4 @@
-function [imgw, imgwr, map] = tps_warp(img, outDim, Zsource, Ztarget, interp)
+function [imgw, imgwr, map] = tps_warp(img, outDim, Ztarget, Zsource, interp)
 %
 % Description: Thin-Plane spline warping of the input image (img) to
 % output image (imgw). The warping is defined by a set of reference points
@@ -49,7 +49,7 @@ Ytarget = Ztarget(:,2)';
 
 % Compute thin-plate spline mapping [W|a1 ax ay] using landmarks
 [wL]=computeWl(Xsource, Ysource, NPs);
-lambda = 0.0;
+lambda = 0.000001;
 wL = wL + lambda * eye(size(wL));
 wY = [Xtarget(:) Ytarget(:); zeros(3,2)]; % Y = ( V| 0 0 0)'   where V = [G] where G is landmark homologous (nx2) ; Y is col vector of length (n+3)
 wW = inv(wL)*wY; % (W|a1 ax ay)' = inv(L)*Y
@@ -90,7 +90,7 @@ return
 % (xp, yp) - coordinate of landmark points
 function [Xw, Yw]=tpsMap(wW, imgH, imgW, xp, yp, np)
 
-[X Y] = meshgrid(1:imgH,1:imgW); % HxW
+[X, Y] = meshgrid(1:imgH,1:imgW); % HxW
 X=X(:)'; % convert to 1D array by reading columnwise (NWs=H*W)
 Y=Y(:)'; % convert to 1D array (NWs)
 NWs = length(X); % total number of points in the plane
@@ -109,8 +109,8 @@ wR = sqrt((rxp-rX).^2 + (ryp-rY).^2); % distance measure r(i,j)=|Pi-(x,y)|
 wK = radialBasis(wR); % compute [K] with elements U(r)=r^2 * log (r^2)
 wP = [ones(NWs,1) X(:) Y(:)]'; % [P] = [1 x' y'] where (x',y') are n landmark points (nx2)
 wL = [wK;wP]'; % [L] = [[K P];[P' 0]]
-lambda = 0;
-wL = wL + lambda * eye(size(wL));
+% lambda = 0.0;
+% wL = wL + lambda * eye(size(wL));
 
 Xw  = wL*wW(:,1); % [Pw] = [L]*[W]
 Yw  = wL*wW(:,2); % [Pw] = [L]*[W]

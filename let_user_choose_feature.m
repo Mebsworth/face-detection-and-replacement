@@ -27,12 +27,19 @@ function [ feature, bbox ] = let_user_choose_feature( videoFrame, bboxes )
         bbox = let_user_choose_face(videoFrame, bboxes);
     end
     
-    % Extract face from image
+    %% Extract face from image
+    % Get coordinates from bbox
     x1 = bbox(1,1);
-    x2 = bbox(1,3);
+    w = bbox(1,3);
     y1 = bbox(1,2);
-    y2 = bbox(1,4);
-    feature = videoFrame(y1:(y1+y2), x1:(x1+x2),:);
+    h = bbox(1,4);
+    % Expand box
+    x1 = x1 - 20;
+    w = w + 40;
+    y1 = y1 - 20;
+    h = h + 40;
+    bbox = [x1, y1, w, h];
+    feature = videoFrame(y1:(y1+h), x1:(x1+w),:);
     
     close
     
