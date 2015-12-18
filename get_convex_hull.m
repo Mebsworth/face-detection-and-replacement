@@ -1,6 +1,8 @@
 function [ x,y,cHull, xE, yE, expandedHull ] = get_convex_hull( features, face )
-
-% disp('beginning get_convex_hull');
+% GET CONVEX HULL
+%   Takes in a set of features and a face and uses offsets to produce a
+%   convex hull for that face, and an expanded version of the convex hull
+%   for the color correction masking that comes later on.
 
 distEyesToNose = features.nose.y - features.eyePair.y;
 distLeftEyeToCenter = features.eyePair.x - features.leftEye.x;
@@ -74,13 +76,15 @@ xE = expandedPoints(:,1);
 yE = expandedPoints(:,2);
 expandedHull = convhull(xE, yE);
  
-% figure('name', 'ConvexHull and Points');imshow(face);
-% hold on; 
-% plot(x, y,'r.','MarkerSize',20); 
-% plot(x(cHull),y(cHull),'r-',x,y,'b*');
-% 
-% plot(xE, yE, 'g.', 'MarkerSize', 20);
-% plot(xE(expandedHull),yE(expandedHull),'g-',xE,yE,'g*');
+%figure('name', 'ConvexHull and Points');imshow(face);
+%hold on; 
+%plot(x, y,'r.','MarkerSize',20); 
+%plot(x(cHull),y(cHull),'r-',x,y,'b*');
+%plot(x(cHull),y(cHull),'b-');
+ 
+%plot(xE, yE, 'g.', 'MarkerSize', 20);
+%plot(xE(expandedHull),yE(expandedHull),'g-',xE,yE,'g*');
+%plot(xE(expandedHull),yE(expandedHull),'g-');
 
 % disp('ending get_convex_hull');
 

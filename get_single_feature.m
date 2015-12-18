@@ -1,5 +1,6 @@
 function [featureRow, featureCol] = get_single_feature(face, featureName, bound)
-% Finds center coordinates of feature (defined by 'featureName') in a face
+% GET SINGLE FEATURE 
+%   Finds center coordinates of feature (defined by 'featureName') in a face
 
 detector = vision.CascadeObjectDetector('ClassificationModel', featureName, 'MergeThreshold', 0);
 boxes = step(detector,face);
@@ -50,7 +51,6 @@ Y = boxes(:,2) + (boxes(:,4) / 2.0);
 [numBoxes, ~] = size(boxes);
 featureRow = sum(Y) / numBoxes;
 featureCol = sum(X) / numBoxes;
-
 
 %% SHOW
 % faceWithAllBoxes = insertShape(face,'Rectangle',boxes);

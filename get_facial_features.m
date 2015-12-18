@@ -25,18 +25,23 @@ end
 % xpoints = [eyePairCol, leftEyeCol, rightEyeCol, noseCol, mouthCol];
 % ypoints = [eyePairRow, leftEyeRow, rightEyeRow, noseRow, mouthRow];
 
+% Eye Pair
 features.eyePair.x = eyePairCol; 
 features.eyePair.y = eyePairRow;
 
+% Left Eye
 features.leftEye.x = leftEyeCol;
 features.leftEye.y = leftEyeRow;
 
+% Right Eye
 features.rightEye.x = rightEyeCol;
 features.rightEye.y = rightEyeRow;
 
+% Nose
 features.nose.x = noseCol; 
 features.nose.y = noseRow;
 
+% Mouth
 features.mouth.x = mouthCol;
 features.mouth.y = mouthRow;
 

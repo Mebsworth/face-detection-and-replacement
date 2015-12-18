@@ -1,6 +1,6 @@
 function [ featurePoints ] = features_to_points( features, offsetX, offsetY )
-%UNTITLED2 Summary of this function goes here
-%   Detailed explanation goes here
+% FEATURES TO POINTS 
+%   Takes features struct and converts to an (nx2) vector of (x,y) points
 
 featurePoints = [
     features.eyePair.x, features.eyePair.y;
